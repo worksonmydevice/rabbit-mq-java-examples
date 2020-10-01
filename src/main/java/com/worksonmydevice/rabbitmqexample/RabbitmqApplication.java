@@ -27,6 +27,11 @@ public class RabbitmqApplication {
     }
 
     @Bean
+    Queue allMessagesQueue() {
+        return new Queue("all-messages", false);
+    }
+
+    @Bean
     TopicExchange exchange() {
         return new TopicExchange(topicExchangeName);
     }
@@ -34,6 +39,11 @@ public class RabbitmqApplication {
     @Bean
     Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("example.binding.#");
+    }
+
+    @Bean
+    Binding allBinding(Queue allMessagesQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(allMessagesQueue).to(exchange).with("#");
     }
 
     @Bean
