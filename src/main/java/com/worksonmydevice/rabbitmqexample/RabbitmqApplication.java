@@ -16,6 +16,8 @@ public class RabbitmqApplication {
     static final String topicExchangeName = "example-exchange";
 
     static final String queueName = "example-queue";
+    public static final String DEAD_MESSAGES = "dead-messages";
+    public static final String EXAMPLE_REJECT = "example-reject";
 
     public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(RabbitmqApplication.class, args).close();
@@ -23,12 +25,20 @@ public class RabbitmqApplication {
 
     @Bean
     Queue queue() {
-        return new Queue(queueName, false);
+        final Queue queue = new Queue(queueName, false);
+        queue.addArgument("x-dead-letter-exchange", topicExchangeName);
+        queue.addArgument("x-dead-letter-routing-key", EXAMPLE_REJECT);
+        return queue;
     }
 
     @Bean
     Queue allMessagesQueue() {
         return new Queue("all-messages", false);
+    }
+
+    @Bean
+    Queue deadLetterQueue() {
+        return new Queue(DEAD_MESSAGES, false);
     }
 
     @Bean
@@ -47,12 +57,18 @@ public class RabbitmqApplication {
     }
 
     @Bean
+    Binding deadLetterBinding(Queue deadLetterQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(deadLetterQueue).to(exchange).with(EXAMPLE_REJECT);
+    }
+
+    @Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
             MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName);
         container.setMessageListener(listenerAdapter);
+        container.setDefaultRequeueRejected(false);
         return container;
     }
 
