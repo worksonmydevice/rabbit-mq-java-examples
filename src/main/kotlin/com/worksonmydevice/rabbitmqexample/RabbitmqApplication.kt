@@ -53,8 +53,8 @@ open class RabbitmqApplication {
 
     @Bean
     open fun container(
-        connectionFactory: ConnectionFactory?,
-        listenerAdapter: MessageListenerAdapter?
+        connectionFactory: ConnectionFactory,
+        listenerAdapter: MessageListenerAdapter
     ): SimpleMessageListenerContainer {
         val container = SimpleMessageListenerContainer()
         container.connectionFactory = connectionFactory

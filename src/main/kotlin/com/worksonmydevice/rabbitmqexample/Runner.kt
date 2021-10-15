@@ -24,7 +24,7 @@ class Runner(private val receiver: Receiver, private val rabbitTemplate: RabbitT
         props.contentType = "text"
         props.contentEncoding = "UTF-8"
         val message = Message(body, props)
-        rabbitTemplate.send(RabbitmqApplication.Companion.topicExchangeName, "example.binding.ok", message)
+        rabbitTemplate.send(RabbitmqApplication.topicExchangeName, "example.binding.ok", message)
         receiver.latch.await(10000, TimeUnit.MILLISECONDS)
     }
 
@@ -36,7 +36,7 @@ class Runner(private val receiver: Receiver, private val rabbitTemplate: RabbitT
         props.contentType = "text"
         props.contentEncoding = "UTF-8"
         val message = Message(body, props)
-        rabbitTemplate.send(RabbitmqApplication.Companion.topicExchangeName, "example.binding.bad", message)
+        rabbitTemplate.send(RabbitmqApplication.topicExchangeName, "example.binding.bad", message)
         receiver.latch.await(10000, TimeUnit.MILLISECONDS)
     }
 }
