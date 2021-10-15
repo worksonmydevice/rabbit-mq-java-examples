@@ -25,8 +25,8 @@ docker-compose down
 ```
 
 ## RabbitMQ HTTP admin console
-Call ```curl -i -u rabbitmq:rabbitmq http://localhost:15672/api/whoami``` should return HTTP 200 status with info in response.
-Access [rabbit-mq-http-admin-console](http://localhost:15672/) using rabbitmq/rabbitmq authentication
+Call ```curl -i -u rabbitmq:rabbitmq http://docker.local:15672/api/whoami``` should return HTTP 200 status with info in response.
+Access [rabbit-mq-http-admin-console](http://docker.local:15672/) using rabbitmq/rabbitmq authentication
 
 
 
